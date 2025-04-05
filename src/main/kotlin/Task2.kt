@@ -18,7 +18,6 @@ fun main () {
                 income <= 249999.0 -> taxRate = 10
                 income in 250000.0..499999.0 -> taxRate = 15
                 income >= 500000.0 -> taxRate = 18
-
             }
             industry = "Сбербанк"
         }
