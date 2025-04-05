@@ -2,7 +2,7 @@ fun main () {
 
     //1. В этом же проекте создай файл с именем Task2.kt, а в нем класс Task2. (тут не понял как внутри файла создать класс)
 
-    val income: Double = 5_000_000.00
+    val income: Double = 339_723.00
     var taxRate = 1
     var tax: Double
 
@@ -46,11 +46,8 @@ fun main () {
         }
     }
 
-
     tax = (income*taxRate)/100
-    println("Налог на сумму $income рублей для отрасли \"$industry\" составляет $tax р. Это составляет $taxRate процентов")
-
-
+    println("Поздравляем! Налог на сумму $income рублей для отрасли \"$industry\" составляет всего $tax рублей. Это буквально $taxRate процентов, вполне себе!")
 
 }
 
