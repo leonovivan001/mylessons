@@ -55,7 +55,7 @@ fun main () {
         }
         else -> println("\nТовара \"$selectedItem\" не существует.")
     }
-    println("\nСпиок товаров в наличии:")
+    println("\nСписок товаров в наличии:")
     println("1. $itemName1, Цена: $itemPrice1$, Количество: $itemQuantity1")
     println("2. $itemName2, Цена: $itemPrice2$, Количество: $itemQuantity2")
     println("3. $itemName3, Цена: $itemPrice3$, Количество: $itemQuantity3")
