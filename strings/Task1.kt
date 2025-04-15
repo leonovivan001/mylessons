@@ -1,29 +1,22 @@
-import java.util.*
 
 fun main () {
 
-//    var word = ("11dfdf 22dfdf 33dfghdgfhgdh")
-//    var i2 = arrayOf("Ваня", "Саша", "Петя", "Слава", "Сергей", "Поликарп")
-//
-//    println(word.split(" ").takeLast(1))
-////    println(i2.takeLast(3))
-//
-//    val kitty = "mur@zik@gmail.com"
-//    println(kitty.substringBefore("@")) // murzik
-////    println(word.substringBefore("ghdg"))
+var listOfNumbers = IntArray(5)
 
-//    val string = "090d32020"
-
-    val string = "Кит Кишка"
-    val result = string.replace("Кишка", "Синий")
-
-    println(result)
-
-
-
-
-
-
-
-
+    var check = true
+    val simbols = "[^A-Za-z0-9]".toRegex()
+    println("Введите 5 чисел по одной на строку \nПосле ввода нажмите Enter:")
+    for (i in listOfNumbers.indices) {
+      val number = readln()
+        if ((number.any {it.isLetter()}) || (simbols.containsMatchIn(number))){
+            println("\nОшибка: вы ввели НЕ число. Программа закрывается...")
+            check = false
+            break
+        }else listOfNumbers[i] = number.toInt()
+    }
+    if (check == true) {
+        for (i in listOfNumbers.indices) {
+            if ((listOfNumbers[i] % 2) == 0) println("Число ${listOfNumbers[i]} чётное") else println("Число ${listOfNumbers[i]} не чётное")
+        }
+    }
 }
