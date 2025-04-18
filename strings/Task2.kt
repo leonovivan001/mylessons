@@ -9,7 +9,6 @@ fun main () {
     }
         var char: CharArray
         char = text.toCharArray()
-        val simbols = "[^A-Za-z0-9]".toRegex()
 
 // 2
         println("Введите шифр (от 0 до 99):")
