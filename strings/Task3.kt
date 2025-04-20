@@ -12,13 +12,20 @@ fun main () {
 
     for (i in userTextCheck.indices) {
         var j = userTextCheck.length - 1 - i
-        if (userTextCheck[i] != userTextCheck[j]) CheckFalse = false
-        if (CheckFalse == false) break
+        if (userTextCheck[i] != userTextCheck[j]) CheckFalse = false break
     }
-        if (CheckFalse == true) println("\nСтрока \"$userText\" - это палиндром!")
+        if (CheckFalse) println("\nСтрока \"$userText\" - это палиндром!")
         else println("\nСтрока \"$userText\", к сожалению, не палиндром.")
 
 }
 
 //    а Роза упала на лапу Азора
 //    Анна
+
+//Task3: Переменная CheckFalse, имя плохое + не в camelCase.
+// Лучше бы подошло что-то вроде isPalindrome. Вторая проверка в этой записи не обязательна:
+// if (userTextCheck[i] != userTextCheck[j]) CheckFalse = false if (CheckFalse == false) break
+// можно просто объеденить 2 действия в 1 if:
+// if (userTextCheck[i] != userTextCheck[j]) { isPalindrome = false break }
+// Запись вроде if (CheckFalse == true) можно легко заменить на if (CheckFalse),
+// так как сама переменная boolean и оператор if ожидает boolean значение в скобках

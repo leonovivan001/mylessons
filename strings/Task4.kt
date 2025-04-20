@@ -3,13 +3,19 @@
 // того, чтобы просто перечислить знаки препинания... В итоге выглядит ужасно, но работает)
 
 fun main () {
-
+    val simbols = "[^а-яА-яA-Za-z0-9- ]".toRegex() // регулярное выражение, которое соответствует символам все кроме букв и цифр (и еще пробела). ^ - значит логическое НЕ
     var count: Int = 0
     println("Введите предложение:")
     var userText = readln()
     println("Введите слово, которое нужно найти:")
     var userWord = readln().lowercase()
-    var userTextArray = userText.lowercase().replace(",", "").replace(".", "").replace(":", "").replace(";", "").replace("!", "").replace("?", "").replace("...", "").replace("-", "").replace("\"", "").replace("(", "").replace(")", "").replace("/", "").replace("<", "").replace(">", "").split(" ")
+    var userTextArray = userText.lowercase().replace(simbols, "").split(" ")
     for (i in userTextArray) if (i == userWord) count++
     println("Количество слов \"$userWord\": $count")
+
 }
+// Task4: Есть реализация функции replace, которая принимает regex, сам синтаксис регулярок
+// можно не запоминать, он быстро гуглится. Но зато такой подход существенно сократит код и
+// избавит от необходимости множественного вызова replace
+// В цикле лучше i заменять на что-то вроде word, так как i, j, k и тд обычно обозначают
+// счетчики/индексы
