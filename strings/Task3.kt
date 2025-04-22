@@ -8,13 +8,13 @@ fun main () {
     println("Введите слово или текст:")
         var userText = readln()
         var userTextCheck = userText.lowercase().replace(" ", "")
-        var CheckFalse = true
+        var checkFalse = true
 
     for (i in userTextCheck.indices) {
         var j = userTextCheck.length - 1 - i
-        if (userTextCheck[i] != userTextCheck[j]) CheckFalse = false break
+        if (userTextCheck[i] != userTextCheck[j]) checkFalse = false break
     }
-        if (CheckFalse) println("\nСтрока \"$userText\" - это палиндром!")
+        if (checkFalse) println("\nСтрока \"$userText\" - это палиндром!")
         else println("\nСтрока \"$userText\", к сожалению, не палиндром.")
 
 }
