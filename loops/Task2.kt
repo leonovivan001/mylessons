@@ -14,6 +14,6 @@ println("\nСумма всех элементов массива равна $sum
     var everage = summOfNumbers / numbers.size
     println("Среднее значение элементов массива: $everage")
 
-
-
 }
+
+//  (1..99).random() - устанавливаем рандомные числа в переменную
