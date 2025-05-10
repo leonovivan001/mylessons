@@ -30,8 +30,8 @@ fun main () {
     println("Комнаты: ${roomBathroom.name}, ${roomBedroom.name}, ${roomKitchen.name}")
     println(
         "Количество предметов в ${roomBathroom.name}: ${roomBathroom.items.size}\n" +
-                "Количество предметов в ${roomBedroom.name}: ${roomBedroom.items.size}\n" +
-                "Количество предметов в ${roomKitchen.name}: ${roomKitchen.items.size}\n" +
-                "Количество мест под инвентарь у игрока: ${player.inventory.size}"
+        "Количество предметов в ${roomBedroom.name}: ${roomBedroom.items.size}\n" +
+        "Количество предметов в ${roomKitchen.name}: ${roomKitchen.items.size}\n" +
+        "Количество мест под инвентарь у игрока: ${player.inventory.size}"
     )
 }
