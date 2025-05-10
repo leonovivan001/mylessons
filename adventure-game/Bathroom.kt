@@ -7,7 +7,6 @@ class Bathroom(
         Item("Душевая кабина", "На вид стеклянная, но я легко узнаю дешевый пластик."),
     ),
 ) {
-
-//  constructor(name: String) : this(name, description = "") - он не нужен, так как в основном констр. прописали переменные
+    //  constructor(name: String) : this(name, description = "") - он не нужен, так как в основном констр. прописали переменные
 
 }
