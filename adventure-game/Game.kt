@@ -18,27 +18,20 @@ fun main () {
 
 
     print("Введите имя вашего героя: ")
-    val player = Player(readln().ifBlank {  // проверка на null и пустую строку, чтобы игра не крашнулась
+    val player = Player(readln().ifBlank {              // проверка на null и пустую строку, чтобы игра не крашнулась
         println("Ошибка: имя должно содержать символы.")
         return
     }
     )
 
 
-                                  // временные строки для проверки кода
-    print("\nПроверяем код ")
-    for (it in 1..5){
-        Thread.sleep(150)
-        print(">")
-    }
+    // временные строки для проверки кода
     println("\nИмя игрока: ${player.name}")
+    println("Комнаты: ${roomBathroom.name}, ${roomBedroom.name}, ${roomKitchen.name}")
     println(
-        "Количество предметов в комнате ${roomBathroom.name}: ${roomBathroom.items.size}\n" +
-        "Количество предметов в комнате ${roomBedroom.name}: ${roomBedroom.items.size}\n" +
-        "Количество предметов в комнате ${roomKitchen.name}: ${roomKitchen.items.size}\n" +
-        "Количество мест под инвентарь у игрока: ${player.inventory.size}"
+        "Количество предметов в ${roomBathroom.name}: ${roomBathroom.items.size}\n" +
+                "Количество предметов в ${roomBedroom.name}: ${roomBedroom.items.size}\n" +
+                "Количество предметов в ${roomKitchen.name}: ${roomKitchen.items.size}\n" +
+                "Количество мест под инвентарь у игрока: ${player.inventory.size}"
     )
-
 }
-
-
