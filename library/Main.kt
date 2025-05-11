@@ -1,6 +1,6 @@
 class Main {
 }
-                // Для чего мы делали класс main, если он нигде не задействован?
+// Для чего мы делали класс main, если он нигде не задействован?
 
 fun main() {
 
@@ -20,11 +20,12 @@ fun main() {
 
     println("Введите название желаемой книги:")
     println(
-        library.searchByTitle(readln().lowercase().ifBlank {    // проверка на null и пустую строку, чтобы база не крашнулась
+        library.searchByTitle(
+            readln().lowercase().ifBlank {    // проверка на null и пустую строку, чтобы база не крашнулась
                 println("Ошибка: вы ничего не ввели.")
                 return
             }
-        )
+        )?: "Книга в базе не найдена."
     )
 }
 
