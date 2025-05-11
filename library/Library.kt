@@ -4,9 +4,7 @@ class Library(
     ) {
 
     fun searchByTitle(name: String): Book? {
-        for (book in books) {
-            if (name == book.name.lowercase()) return book
-        }
+        for (book in books) if (name == book.name.lowercase()) return book
         return null
     }
 }
