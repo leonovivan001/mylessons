@@ -10,14 +10,22 @@ fun main() {
     val book4 = Book("Чапаев и Пустота", "В. Пелевин", "004-N0276")
     val book5 = Book("Хоббит", "Р. Толкин", "111-N0444")
 
-    val library = Library()                   // создаем саму "библиотеку", через которую можно обращаться к книгам
-    library.books.addAll(listOf(book1, book2, book3, book4, book5)) // добавляем сразу все книги через временный список listOf
+    val library = Library() // создаем саму "библиотеку", через которую можно обращаться к книгам
+
+    library.books.add(book1)
+    library.books.add(book2)
+    library.books.add(book3)
+    library.books.add(book4)
+    library.books.add(book5)
+
+    println("Введите название желаемой книги:")
     println(
-        Library.searchByTitle(
-            readln().lowercase().ifBlank {    // проверка на null и пустую строку, чтобы база не крашнулась
+        library.searchByTitle(readln().lowercase().ifBlank {    // проверка на null и пустую строку, чтобы база не крашнулась
                 println("Ошибка: вы ничего не ввели.")
                 return
-            }, library.books                  // пришлось в функцию передать массив, иначе она его не видела
+            }
         )
     )
 }
+
+// Я понял ошибку с companion object)) Я думал будет правильнее в main вызвать функцию searchByTitle напрямую через класс, а не через обьект класса, поэтому сделал companion, а передал в функцию массив, так как из-за companion object функция не видела массива внутри класса, оказывается...
