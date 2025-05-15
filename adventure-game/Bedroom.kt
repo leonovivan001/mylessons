@@ -1,13 +1,11 @@
 class Bedroom(
-    val name: String,
-    val description: String = "",
-    val items: Array<Item> = arrayOf(
+    name: String,
+    description: String = "",
+    items: Array<Item> = arrayOf(
         Item("Окно", "Обычное окно с ручкой на дальней стене комнаты, есть форточка."),
         Item("Тумбочка", "Небольшого размера деревяная тумба. Очень подходит к кровати."),
         Item("Кровать", "Незаправленная кровать из Икеи, вместе с тумбой смотрятся хорошо!"),
     ),
-) {
-
-//  constructor(name: String) : this(name, description = "") - он не нужен, так как в основном констр. прописали переменные
+) :Room(name, description, items){
 
 }

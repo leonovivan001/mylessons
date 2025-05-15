@@ -5,12 +5,7 @@ class Game() {
 }
 fun main () {
 
-    println("""
-            ====================================================
-            |          Добро пожаловать в игру "Дом"!          |
-            |       Цель игры: выбраться из дома. Удачи!       |
-            ====================================================
-            """)
+    startMessage()
 
     val roomBathroom = Bathroom("Ванная комната", "Обычный совмещенный санузел.")
     val roomBedroom = Bedroom("Спальня", "Просторная спальня с двуспальной кроватью.")
@@ -23,15 +18,29 @@ fun main () {
         return
     }
     )
+    println(player.currentRoom?.name)
+    player.currentRoom = roomBathroom
+    println(player.currentRoom?.name)
 
 
-    // временные строки для проверки кода
-    println("\nИмя игрока: ${player.name}")
-    println("Комнаты: ${roomBathroom.name}, ${roomBedroom.name}, ${roomKitchen.name}")
+// временные строки для проверки кода
+//    println("\nИмя игрока: ${player.name}")
+//    println("Комнаты: ${roomBathroom.name}, ${roomBedroom.name}, ${roomKitchen.name}")
+//    println(
+//        "Количество предметов в ${roomBathroom.name}: ${roomBathroom.items.size}\n" +
+//        "Количество предметов в ${roomBedroom.name}: ${roomBedroom.items.size}\n" +
+//        "Количество предметов в ${roomKitchen.name}: ${roomKitchen.items.size}\n" +
+//        "Количество мест под инвентарь у игрока: ${player.inventory.size}"
+//    )
+
+}
+fun startMessage() {
     println(
-        "Количество предметов в ${roomBathroom.name}: ${roomBathroom.items.size}\n" +
-        "Количество предметов в ${roomBedroom.name}: ${roomBedroom.items.size}\n" +
-        "Количество предметов в ${roomKitchen.name}: ${roomKitchen.items.size}\n" +
-        "Количество мест под инвентарь у игрока: ${player.inventory.size}"
+        """
+            ====================================================
+            |          Добро пожаловать в игру "Дом"!          |
+            |       Цель игры: выбраться из дома. Удачи!       |
+            ====================================================
+            """
     )
 }
