@@ -7,4 +7,13 @@ class Kitchen(
         Item("Холодильник", "Советский холодильник \"Бирюса\". Ни разу не ремонтировался."),
     ),
 ) :Room(name, description, items){
+
+    override fun printItems() {
+        if (items.isNotEmpty()) {
+            print("$name содержит ${items.size} предмета: ")
+            println(items.joinToString { it.name })
+        } else println("$name полностью пуста")
+
+    }
+
 }

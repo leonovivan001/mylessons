@@ -4,7 +4,7 @@ class Item(
 ) {
 
     override fun toString(): String {
-        return "$name. $description"
+        return "$name $description"
     }
 }
 
