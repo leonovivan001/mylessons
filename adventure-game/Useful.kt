@@ -1,0 +1,3 @@
+interface Useful {
+    fun use()
+}

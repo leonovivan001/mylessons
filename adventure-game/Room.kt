@@ -1,11 +1,9 @@
-open class Room(
+abstract open class Room(
     val name: String,
-    val description: String = "",
-    val items: Array<Item> = arrayOf()
+    val description: String,
+    val items: MutableList<Item> = mutableListOf()
 ) {
 
-    open fun printItems() {
-        println("В этой комнате нет доступных предметов")
-    }
+    abstract fun printItems()
 
 }
