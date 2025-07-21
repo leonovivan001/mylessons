@@ -1,12 +1,17 @@
+import Game.Companion.isGameFinished
+import kotlin.collections.get
+import kotlin.contracts.contract
+import kotlin.coroutines.coroutineContext
+import kotlin.time.measureTime
+
 class Player(
     val name: String,
     val inventory: Array<Item?> = arrayOfNulls(20),
-
-    ) {
+) {
 
     var currentRoom: Room? = null
         set(value) {
-            println("Вы перешли в комнату: ${value?.name}. ${value?.description}")
+            println("✅Вы перешли в комнату: ${value?.name}. ${value?.description}")
             field = value
             interact()
         }
@@ -20,164 +25,205 @@ class Player(
         }
         println()
     }
-
-    fun addInventory(numberOfItem: String): Boolean {
-        if (inventory.contains(currentRoom?.items!![numberOfItem.toInt() - 1])) {
+    fun addInventory(numberOfItem: Item): Boolean {
+        if (inventory.contains(numberOfItem)) {
             println("\n❗Этот предмет уже есть в твоем инвенторе.")
             println()
             return false
         }
-        val emptyPlaceIndex =
-            inventory.indexOfFirst { it == null } // находим первую пустую ячейку (Null)
-        inventory[emptyPlaceIndex] = currentRoom?.items!![numberOfItem.toInt() - 1] // добавляем предмет в массив
+        val emptyPlaceIndex = inventory.indexOfFirst { it == null } // находим первую пустую ячейку (Null)
+        inventory[emptyPlaceIndex] = numberOfItem // добавляем предмет в массив
         println("\n✅Предмет добавлен в инвентарь!")
         println()
         return true
     }
-    fun printWinText () {
-        print("Что это?")
+    fun printWinText (){
+//        Thread.sleep(1300); print("Что это? ")
+//        Thread.sleep(1500); print("Такой ")
+//        Thread.sleep(500); print("маленький... ")
+//        Thread.sleep(1800); print("Блестящий... ")
+//        Thread.sleep(1800); print("Это ключ! ")
+//        Thread.sleep(1000); println("От наручников!")
+        Thread.sleep(2000); println("\uD83C\uDF1FПохоже, это именно то, что я искал!")
+//        Thread.sleep(1500)
+    }
+    fun getFinish (item: Item, contained: Item) :Int {
+        var choice = 100
+        do {
+            println("\nВаши действия:\n1 - Используем ключ и выходим на свободу\n0 - Продолжить изучать дом, оставив ключ у себя")
+            when (textReadln(1)) {
+                1 -> {
+                    isGameFinished = true
+                    choice = 1
+                    return 1
+                }
+                0 -> {
+                    if (addInventory(contained) == false) {
+                        continue
+                    }
+                    (item as Furniture).internalItem = Key("Вы уже здесь все осмотрели.", "Пусто")
+                    choice = 0
+                    return 0
+                }
+            }
+        } while (choice == 100)
+        return 3
+    }
+    fun wrong() {
+        println("❗Ошибка! Введите номер из списка.")
         println()
-        Thread.sleep(1000)
-        Thread.sleep(1800)
-        print("Такой ")
-        Thread.sleep(1000)
-        print("маленький... ")
-        Thread.sleep(1800)
-        print("Блестящий... ")
-        Thread.sleep(1800)
-        print("Это ключ! ")
-        Thread.sleep(1000)
-        print("От наручников!")
-        Thread.sleep(2000)
+        return
+    }
+    fun textReadln(range: Int): Int {
+        val textReadln = readln().trim()
+        if (textReadln.matches(Regex("^\\d+$"))
+            && textReadln.toInt() in 0..range) {
+            return textReadln.toInt()
+        }
+        return 100
     }
 
-    // Взаимодействия с предметами items
-    fun interact() {
+    fun interact() {        // Взаимодействия с предметами items
         while (true) {
             currentRoom?.printItems()
             println("----------------------\nС чем взаимодействуем? (0 - назад)")
-            var numberOfItem = readln() // вводим и проверяем чтобы число было в рамках количества итемов
-            if (!numberOfItem.contains("[а-яА-яA-Za-z]".toRegex()) && numberOfItem.isNotBlank() && numberOfItem.toInt() in 0..(currentRoom?.items!!.size)) {
-                if (numberOfItem.toInt() == 0) {
+            var numberOfItem = textReadln(currentRoom?.items!!.size) // вводим и проверяем чтобы число было в рамках количества итемов
+            if (numberOfItem != 100) { // начало выбор предметов
+                if (numberOfItem == 0) {
                     return
                 }
-                when {       // Проверка на Collectible or Not
-                    currentRoom?.items!![numberOfItem.toInt() - 1] is Collectible -> {
+                var item: Item = currentRoom?.items!![numberOfItem - 1]
+
+                when {       // Проверка на Collectible
+                    item is Collectible && item is Useful -> { // если Collectible ДА
                         println()
                         Thread.sleep(1300)
-                        println("\uD83D\uDCA1Описание предмета: ${currentRoom?.items!![numberOfItem.toInt() - 1].description}")
+                        println("\uD83D\uDCA1Описание предмета: ${item.description}")
                         println()
-                        println("Выберите действие:\n1 - Взаимодействовать с предметом\n0 - Назад")
-                        val getOrUseselection = readln()
-                        if (!getOrUseselection.contains("[а-яА-яA-Za-z]".toRegex()) && getOrUseselection.isNotBlank() && getOrUseselection.toInt() in 0..1) {
-                            when (getOrUseselection.toInt()) {
+                        var choice1 = 100
+                        do {
+                            println("Выберите действие:\n1 - Взаимодействовать с предметом\n0 - Назад")
+                            when (textReadln(1)) {
                                 0 -> {
                                     println()
-                                    continue
+                                    break
                                 }
-
-                                1 -> {
+                                1 -> {       // начало
                                     println()
-                                    println("✅Вы осматриваете предмет \"${currentRoom!!.items[numberOfItem.toInt() - 1].name}\":")
-                                    (currentRoom!!.items[numberOfItem.toInt() - 1] as? Useful)?.use()
+                                    println("✅Вы осматриваете предмет \"${item.name}\":")
+                                    item.use()
                                     Thread.sleep(1800)
-                                    // добавляем в момент взаимдействия возможность добавить предмет в инвентарь
                                     println()
-                                    if (currentRoom!!.items[numberOfItem.toInt() - 1].name == "\uD83D\uDD11Ключ от наручников") {
-                                        Thread.sleep(1500)
-                                        println("\uD83C\uDF1FВот он - КЛЮЧ! Похоже, это именно то, что я искал!")
-                                        Thread.sleep(1500)
-                                        println("\nВаши действия:\n1 - Используем ключ и выходим на свободу\n0 - Продолжить изучать дом")
-                                        val finishMe = readln()
-                                        if (!finishMe.contains("[а-яА-яA-Za-z]".toRegex()) && finishMe.isNotBlank() && finishMe.toInt() in 0..1) {
-                                            when (finishMe.toInt()) {
-                                                1 -> {
-                                                    Game.isGameFinished = true
-                                                    Thread.sleep(1500)
-                                                    println("Происходит следующее:")
-                                                    println()
-                                                    Thread.sleep(1500)
-                                                    return
-                                                }
-                                                0 -> continue
-                                            }
-                                        }
-                                    }
-                                    var IGotIt: String
                                     do {
                                         println("Забрать себе? \n1 - Да \n0 - Нет")
-                                        IGotIt = readln()
-                                        if (!IGotIt.contains("[а-яА-яA-Za-z]".toRegex()) && IGotIt.isNotBlank() && IGotIt.toInt() in 0..1) {
-                                            when (IGotIt.toInt()) {
-                                                0 -> continue
-                                                1 -> if (addInventory(numberOfItem) == false) continue
+                                        when (textReadln(1)) {
+                                            0 -> {
+                                                println()
+                                                println("Вы оставляете ${item.name} на месте")
+                                                println()
+                                                choice1 = 0
+                                                break
                                             }
-                                        } else {
-                                            println("❗Ошибка! Введите номер из списка.")
-                                            println()
+                                            1 -> {
+                                                if (addInventory(item) == false) {
+                                                    choice1 = 0
+                                                    break
+                                                }
+                                                currentRoom?.items!!.remove(item) // удалить предмет из списка в комнате
+                                                choice1 = 0
+                                                break
+                                            }
+                                            100 -> wrong()
                                         }
-
-                                    } while (IGotIt.toIntOrNull() !in 0..1)
-//                                    val IGotIt = readln()
-//                                    if (!IGotIt.contains("[а-яА-яA-Za-z]".toRegex()) && IGotIt.isNotBlank() && IGotIt.toInt() in 0..1) {
-//                                        when (IGotIt.toInt()) {
-//                                            0 -> continue
-//                                            1 -> if (addInventory(numberOfItem) == false) continue
-//                                        }
-//                                    } else {
-//                                        print("❗Ошибка! Введите номер из списка.")
-//                                        println()
-//                                    }
-                                    // добавляем возможность в момент взаимодействия добавить предмет в инвентарь
-                                }
+                                    } while (true)
+                                }    // конец
+                                100 -> wrong()
                             }
-                        } else {
-                            print("❗Ошибка! Введите номер из списка.")
-                            println()
-                        }
+                        } while (choice1 == 100)
+
                     }
-                    //      конец блока проверки на Collectible
 
-                    currentRoom?.items!![numberOfItem.toInt() - 1] !is Collectible -> {
+                    item is Useful -> {           //если НЕ Collectible
                         Thread.sleep(1300)
-                        println("\uD83D\uDCA1Описание предмета: ${currentRoom?.items!![numberOfItem.toInt() - 1].description}")
+                        println("\uD83D\uDCA1Описание предмета: ${item.description}")
                         Thread.sleep(1800)
-                        print("✅Вы осматриваете предмет \"${currentRoom!!.items[numberOfItem.toInt() - 1].name}\": ")
-                        (currentRoom!!.items[numberOfItem.toInt() - 1] as? Useful)?.use() // as? Useful)? как бы проверяет является ли выбранный обьект обьектом класса Useful проверять надо так как программа не знает этого
+                        print("✅Вы осматриваете предмет \"${item.name}\": ")
+                        item.use()
                         Thread.sleep(1800)
 
-                        // добавляем возможность найти предмет внутри предмета
-
-                        if ((currentRoom?.items!![numberOfItem.toInt() - 1] is Furniture)
-                            && (currentRoom?.items!![numberOfItem.toInt() - 1].name == "Кровать")
-                        ) {
-
-                            if (currentRoom?.items!!.size == 12) {
+                        if (item is Furniture) {
+                            val contained = item.internalItem as? Item
+                            println()
+                            if ((contained?.name == "Пусто.")  // Если в мебели ПУСТО
+                                || (contained?.name == "Вы уже здесь все осмотрели.")) {
+                                println(contained)
                                 println()
-                                Thread.sleep(1600)
-                                println("Показалось. Кроме грязных носков здесь больше ничего нет")
-                                Thread.sleep(1600)
-                                println()
+                                Thread.sleep(1800)
                                 continue
+                            } else {                           // Если в мебели ЕСТЬ предмет
+                                println("✅Успешно! Вы находите предмет: ${contained!!.name}")
+                                println()
+                                var choice: Int = 100
+                                do {
+                                    println("Забрать себе? \n1 - Да \n0 - Нет")
+                                    when (textReadln(1)) {
+                                        0 -> {
+                                            println()
+                                            println("Вы оставляете ${contained!!.name} внутри предмета \"${item.name}\"")
+                                            println()
+                                            choice = 0
+                                            break
+                                        }
+                                        1 -> if (contained.name == "\uD83D\uDD11Ключ от наручников") { // проверка на ключ
+                                            printWinText () // победный текст
+                                            when (getFinish(item, contained)) {
+                                                1 -> return
+                                                0 -> return
+                                            }
+                                        } else { // добавляем в инвентарь и удаляем из мебели
+                                            if (addInventory(contained) == false) {
+                                                continue
+                                            }
+                                            else {
+                                                item.internalItem = Key("Вы уже здесь все осмотрели.", "Пусто")
+                                                choice = 1
+                                                break
+                                            }
+                                        }
+                                        100 -> {
+                                            choice = 100
+                                            wrong()
+                                        }
+                                    }
+                                } while (choice == 100)
+
                             }
-                            println()
-                            currentRoom?.items!!.add(Key("\uD83D\uDD11Ключ от наручников", "Хм, ключ кажется необычным, стоит рассмотреть получше"))
-                            printWinText()
-                            println()
-                            println("\n✅ВНИМАНИЕ✅ Вы нашли новый предмет: Ключ от наручников")
-                            Thread.sleep(1800)
-                            println("Список предметов в комнате обновлен")
-                            Thread.sleep(1800)
                         } else {
                             println()
-                            println("✅Результат: ничего полезного НЕ НАЙДЕНО")
-                            Thread.sleep(2500)
+                            println("Ничего не происходит, вы просто смотрите на ${item.name.lowercase()}")
+                            Thread.sleep(1800)
                         }
                     }
                 }
-            } else {
-                print("Ошибка! Введите номер из списка.\n")
-            }
+            } else wrong() // конец проверки выбора предметов
         }
     }
 }
+
+
+/*
+
+Список изменений:
+ +++Добавили наличие предметов внутри мебели
+ +++Удаляем Collectible предмет из списка предметов в комнате после добавления его в инвентарь
+ +++Добавляем цикличность при неверном ответе "Берем себе? Да-Нет" и "Взаимодействовать Да-Нет"
+ +++Изменены фильтра на ввод: теперь пропускает только цифры
+ Вывести отдельно в методы проверка на Useful и на Collectible
+ Список действий в инвентаре (сиги + спички = покурить) и использовать предметы из инвенторя
+ Вернуть WINtext НЕ ЗАБЫТЬ
+
+ */
+
+
+
+

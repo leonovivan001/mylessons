@@ -38,7 +38,7 @@ fun main () {
             1 -> {
                 var whatIsShowRooms = showRooms(rooms)
                 if (whatIsShowRooms in 1..3) player.currentRoom = rooms[whatIsShowRooms - 1]
-                else println()
+                else if (whatIsShowRooms == 0) println(); continue
             }
             2 -> player.showItems()
             0 -> {
@@ -72,28 +72,29 @@ fun showMenu(): Int {
     while (true) {
         println("Выберите действие:\n1 - Перейти в другую комнату \n2 - Показать инвентарь\n0 - Выход")
         val chooseAction = readln()
-        if (!chooseAction.contains("[а-яА-яA-Za-z]".toRegex()) && chooseAction.isNotBlank() && chooseAction.toInt() in 0..2) return chooseAction.toInt()
-        else print("Ошибка! Введите номер из списка. ")
+        if (!chooseAction.contains("[а-яА-яA-Za-z]".toRegex()) && chooseAction.isNotBlank() && chooseAction.toInt() in 0..2) {
+            return chooseAction.toInt()
+        } else println("❗Ошибка! Введите номер из списка. ")
     }
 }
 fun showRooms(rooms: MutableList<Room>): Int {
     while (true) {
         println("----------------------")
         println("Выберите комнату:\n1 - ${rooms[0].name}\n2 - ${rooms[1].name}\n3 - ${rooms[2].name}\n0 - Назад")
-        val chooseRoom = readln()
-        if (!chooseRoom.contains("[а-яА-яA-Za-z]".toRegex()) && chooseRoom.isNotBlank() && chooseRoom.toInt() in 0..3) return chooseRoom.toInt()
-        else print("Ошибка! Введите номер из списка.\n")
-        if (chooseRoom.toInt() == 0) println("Нажал ноль")
+        val chooseRoom = readln().toIntOrNull()
+        if (chooseRoom in 0..3) return chooseRoom!!
+        else println("Ошибка! Введите номер из списка."); continue
     }
 }
 fun endMessage(name: String, inventory: Array<Item?>) {
     val listOfInventory: MutableList <String> = mutableListOf()
-
     inventory.filterNotNull().forEach {
         if(it.name != "Несколько пачек денег"){
             listOfInventory.add(it.name)
         }
     }
+    println("Происходит следующее:")
+    Thread.sleep(1500)
     println(
         """
             =========================================================
@@ -127,8 +128,8 @@ fun endMessage(name: String, inventory: Array<Item?>) {
             =========================================================
 
 Для вас история закончилась хорошо, в память о ней напоминают лишь вещи, оставшиеся у вас: 
-${listOfInventory.joinToString()}... 
-Денег у вас нет, но зато есть маленький ключик от наручников с красивой филигранью и гравировкой в виде буквы "L".
+${listOfInventory.joinToString()}. Только вот денег нет...
+Но зато есть маленький ключик от наручников с красивой филигранью и гравировкой в виде буквы "L".
             """)
 }
 
