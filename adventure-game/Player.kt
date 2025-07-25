@@ -265,13 +265,11 @@ class Player(
         Thread.sleep(2000); println("\uD83C\uDF1FПохоже, это именно то, что я искал!")
     }
     fun getFinish(item: Item, contained: Item) :Int {
-        var choice = 100
         do {
             println("\nВаши действия:\n1 - Используем ключ и выходим на свободу\n0 - Продолжить изучать дом, оставив ключ у себя")
             when (textReadln(1)) {
                 1 -> {
                     isGameFinished = true
-                    choice = 1
                     return 1
                 }
                 0 -> {
@@ -283,12 +281,10 @@ class Player(
                         continue
                     }
                     (item as Furniture).internalItem = Key("Вы уже здесь все осмотрели.", "Пусто")
-                    choice = 0
                     return 0
                 }
             }
-        } while (choice == 100)
-        return 3
+        } while (true)
     }
     fun keyCheck(item: Item): Int {
         if ((inventory.contains(item)) && (item.name == "\uD83D\uDD11Ключ от наручников")) {
@@ -302,12 +298,12 @@ class Player(
         while (isGameFinished == false) {
             currentRoom?.printItems()
             println("----------------------\nС чем взаимодействуем? (0 - назад)")
-            var numberOfItem = textReadln(currentRoom?.items!!.size) // вводим и проверяем чтобы число было в рамках количества итемов
+            val numberOfItem = textReadln(currentRoom?.items!!.size) // вводим и проверяем чтобы число было в рамках количества итемов
             if (numberOfItem != 100) { // начало выбор предметов
                 if (numberOfItem == 0) {
                     return
                 }
-                var item: Item = currentRoom?.items!![numberOfItem - 1]
+                val item: Item = currentRoom?.items!![numberOfItem - 1]
 
                 if (handleCollectible(item) == 1) {  // проверяем item Collectible
                     handleUseful(item)               // если нет, то Useful
