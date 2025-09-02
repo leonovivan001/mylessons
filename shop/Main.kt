@@ -52,7 +52,7 @@ class Application {
                 newProductPrice,
                 newProductCategory
             )
-            println("Создан продукт:\n$newProduct")
+            println("Создан товар:\n$newProduct")
             return newProduct
         }
         fun showProducts(products: MutableList<Product>) {
