@@ -67,14 +67,11 @@ class Application {
         }
         fun newProductDouble(): Double {
             while (true) {
-                try {
-                    val textReadln = readln()
-                    if ((textReadln.matches(Regex("^\\d+$")))) {
-                        return textReadln.toDouble()
-                    }
-                    throw NewPriceException("Ошибка, введите сумму (цифры)")
-                } catch (e: NewPriceException) {
-                    println(e.message)
+                val textReadln = readln()
+                if ((textReadln.matches(Regex("^\\d+$")))) {
+                    return textReadln.toDouble()
+                } else {
+                    println("Введите стоимость (только цифры)") // Поменял проброс исключения на else, в данной проверке IF это проще
                     Thread.sleep(500)
                     println()
                 }
@@ -82,23 +79,20 @@ class Application {
         }
         fun newProductCategory(): Category {
             while (true) {
-                try {
-                    println(
-                        "1. ${Category.ELECTRONICS.rusName}\n" +
-                        "2. ${Category.FURNITURE.rusName}\n" +
-                        "3. ${Category.ACCESSORIES.rusName}"
-                    )
-                    val textReadln = readln().trim()
-                    if (textReadln.matches(Regex("^\\d+$")) && textReadln.toInt() in 1..3) {
-                        when (textReadln.toInt()) {
-                            1 -> return Category.ELECTRONICS
-                            2 -> return Category.FURNITURE
-                            3 -> return Category.ACCESSORIES
-                        }
+                println(
+                    "1. ${Category.ELECTRONICS.rusName}\n" +
+                    "2. ${Category.FURNITURE.rusName}\n" +
+                    "3. ${Category.ACCESSORIES.rusName}"
+                )
+                val textReadln = readln().trim()
+                if (textReadln.matches(Regex("^\\d+$")) && textReadln.toInt() in 1..3) {
+                    when (textReadln.toInt()) {
+                        1 -> return Category.ELECTRONICS
+                        2 -> return Category.FURNITURE
+                        3 -> return Category.ACCESSORIES
                     }
-                    throw NewCategoryException("Ошибка, введите цифру от 1 до 3")
-                } catch (e: NewCategoryException) {
-                    println(e.message)
+                } else {
+                    println("Ошибка, введите цифру от 1 до 3")  // Поменял проброс исключения на else, в данной проверке IF это проще
                     Thread.sleep(500)
                     println()
                 }
