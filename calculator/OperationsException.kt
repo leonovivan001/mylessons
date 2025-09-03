@@ -1,0 +1,1 @@
+class OperationsException(text: String) : Exception(text) {}
