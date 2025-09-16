@@ -22,11 +22,11 @@ fun menuMessage() {
 }
 fun textReadln(): Int {
     val textReadln = readln().trim()
-    if (textReadln.matches(Regex("^\\d+$"))
-        && textReadln.toInt() in 1..3) {
-        return textReadln.toInt()
+    if (!(textReadln.matches(Regex("^\\d+$"))
+        && textReadln.toInt() in 1..3)) {
+        return 100
     }
-    return 100
+    return textReadln.toInt()
 }
 
 

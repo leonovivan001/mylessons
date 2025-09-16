@@ -1,4 +1,5 @@
 import jdk.jfr.Threshold
+import java.io.File
 import kotlin.math.cbrt
 
 class Application {
@@ -6,17 +7,36 @@ class Application {
         @JvmStatic
 
         fun main(args: Array<String>) {
-                var products: MutableList<Product> = mutableListOf(
-                    Product("Телевизор LG", "Плазма, диагонать 50 см.", 36000.00, Category.ELECTRONICS),
-                    Product("Холодильник \"Бирюса\"", "Двухкамерный, цвет белый", 28500.00, Category.ELECTRONICS),
-                    Product("Утюг \"Tefal\"", "Титановый корпус, цвет белый", 3990.00, Category.ELECTRONICS),
-                    Product("Компьютерный стол \"Zertex\"", "Модель 204, цвет черный", 18200.00, Category.FURNITURE),
-                    Product("Компьютерное кресло \"Zertex\"", "Модель 302, цвет черный", 7999.00, Category.FURNITURE),
-                    Product("Брелок \"Zertex\"", "Брелок на ключи с эмблемой магазина", 0.99, Category.ACCESSORIES ),
-                )
+
+            val fileUtil = FileUtil()                                // Пременная класса FileUtil для манипуляций
+            var products: MutableList<Product> = mutableListOf()     // Список товаров временный (пустой)
+
+            try {
+                fileUtil.readProducts().forEach { products.add(it) } // Формируем временный список из файла данных
+            }catch (e: FileNotFoundException) {
+                println(e.message)
+                println("Программа закрывается...")
+                Thread.sleep(800)
+                return
+            }catch (e: EmptyfileException) {
+                println(e.message)
+                println("Программа закрывается...")
+                Thread.sleep(800)
+                return
+            }catch (e: NullProductException) {
+                println(e.message)
+                println("Программа закрывается...")
+                Thread.sleep(800)
+                return
+            }catch (e: EmptyPriceException) {
+                println(e.message)
+                println("Программа закрывается...")
+                Thread.sleep(800)
+                return
+            }
+
             while (true) {
                 val menu = Menu()
-
                 when (menu.showMainMenu()) {
                     1 -> {
                         showProducts(products)
@@ -24,6 +44,7 @@ class Application {
                     }
                     2 -> {
                         products.add(createProduct())
+                        fileUtil.saveProducts(products)
                         Thread.sleep(800)
                     }
                     3 -> {
@@ -49,8 +70,8 @@ class Application {
             val newProduct = Product(
                 newProductName,
                 newProductDescription,
+                newProductCategory,
                 newProductPrice,
-                newProductCategory
             )
             println("Создан товар:\n$newProduct")
             return newProduct
@@ -63,18 +84,15 @@ class Application {
         }
         fun newProductString() : String {
             return readln().trim()
-
         }
         fun newProductDouble(): Double {
             while (true) {
                 val textReadln = readln()
-                if ((textReadln.matches(Regex("^\\d+$")))) {
-                    return textReadln.toDouble()
-                } else {
+                if (!(textReadln.matches(Regex("^\\d+$")))) {
                     println("Введите стоимость (только цифры)") // Поменял проброс исключения на else, в данной проверке IF это проще
                     Thread.sleep(500)
                     println()
-                }
+                } else return textReadln.toDouble()
             }
         }
         fun newProductCategory(): Category {
@@ -85,22 +103,18 @@ class Application {
                     "3. ${Category.ACCESSORIES.rusName}"
                 )
                 val textReadln = readln().trim()
-                if (textReadln.matches(Regex("^\\d+$")) && textReadln.toInt() in 1..3) {
+                if (!(textReadln.matches(Regex("^\\d+$")) && textReadln.toInt() in 1..3)) {
+                    println("Ошибка, введите цифру от 1 до 3")  // Поменял проброс исключения на else, в данной проверке IF это проще
+                    Thread.sleep(500)
+                    println()
+                } else {
                     when (textReadln.toInt()) {
                         1 -> return Category.ELECTRONICS
                         2 -> return Category.FURNITURE
                         3 -> return Category.ACCESSORIES
                     }
-                } else {
-                    println("Ошибка, введите цифру от 1 до 3")  // Поменял проброс исключения на else, в данной проверке IF это проще
-                    Thread.sleep(500)
-                    println()
                 }
             }
         }
     }
 }
-
-
-
-// Почему мы "помечаем" товары маркерами ELECTRONICS, FURNITURE и тд именно через Enum, ведь это вполне можно сделать и через интерефейс?

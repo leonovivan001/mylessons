@@ -1,11 +1,11 @@
 data class Product (
     val name: String,
     val description: String,
-    val price: Double,
     val category: Category,
+    val price: Double,
 ) {
     override fun toString(): String {
-        return "Категория: ${category.rusName}, Имя: $name, Описание: $description, Цена: $price руб."
+        return "Наименование товара: $name, Описание товара: $description, Категория: ${category.rusName}, Цена: $price руб."
     }
 }
 
