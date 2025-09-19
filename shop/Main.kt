@@ -8,11 +8,11 @@ class Application {
 
         fun main(args: Array<String>) {
 
-            val fileUtil = FileUtil()                                // Пременная класса FileUtil для манипуляций
-            var products: MutableList<Product> = mutableListOf()     // Список товаров временный (пустой)
+            val fileUtil = FileUtil()                  // Пременная класса FileUtil для манипуляций
+            var products: MutableList<Product>         // Временный список товаров (пустой)
 
             try {
-                fileUtil.readProducts().forEach { products.add(it) } // Формируем временный список из файла данных
+                products = fileUtil.readProducts().toMutableList() // Актуализируем временный список из файла данных
             }catch (e: FileNotFoundException) {
                 println(e.message)
                 println("Программа закрывается...")
