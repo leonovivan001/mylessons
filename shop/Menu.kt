@@ -1,13 +1,12 @@
 class Menu {
     fun showMainMenu(): Int {
         menuMessage()
-        when (textReadln()) {
-            1 -> return 1
-            2 -> return 2
-            3 -> return 3
-            100 -> println("Ошибка, введите цифру от 1 до 3")
+        val choice = textReadln()
+        if (choice == 100) {
+            println("Ошибка, введите цифру от 1 до 4")
+            return 100
         }
-        return 0
+        return choice
     }
 }
 
@@ -17,13 +16,17 @@ fun menuMessage() {
         "Выберите действие:\n" +
         "1. Показать все товары\n" +
         "2. Создать новый товар\n" +
-        "3. Выйти из приложения"
+        "3. Купить товар\n" +
+        "4. Показать журнал продаж\n" +
+        "______________________\n" +
+        "0. Выйти из приложения"
+
     )
 }
 fun textReadln(): Int {
     val textReadln = readln().trim()
     if (!(textReadln.matches(Regex("^\\d+$"))
-        && textReadln.toInt() in 1..3)) {
+        && textReadln.toInt() in 0..4)) {
         return 100
     }
     return textReadln.toInt()
